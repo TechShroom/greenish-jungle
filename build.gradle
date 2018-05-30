@@ -1,0 +1,48 @@
+plugins {
+    id "com.github.hierynomus.license" version "0.14.0"
+ 	id "net.researchgate.release" version "2.7.0"
+ 	id "com.techshroom.incise-blue" version "0.0.8"
+}
+
+apply plugin: 'java'
+apply plugin: 'java-library'
+
+inciseBlue {
+    plugins {
+    	apt
+    	license
+    	util
+        maven
+    }
+    
+    util.javaVersion = '1.8'
+    maven {
+        description 'Environment/Config library.'
+        coords 'TechShroom', 'greenish-jungle'
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+    	failOnVersionConflict()
+
+        force 'com.google.guava:guava:' + guavaVersion, 'com.google.code.findbugs:jsr305:3.0.1'
+
+     	cacheChangingModulesFor 0, 'seconds'
+   	}
+}
+
+dependencies {
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+
+    compileOnly group: 'com.techshroom', name: 'jsr305-plus', version: '0.0.1'
+
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    aptCompileOnly group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc4'
+    compileOnly group: 'com.google.auto.value', name: 'auto-value-annotations', version: '1.6'
+    annotationProcessor group: 'com.google.auto.value', name: 'auto-value', version: '1.6'
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+}
