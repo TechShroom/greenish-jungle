@@ -27,10 +27,10 @@ package com.techshroom.jungle;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class EnvNamespace<T> extends NamespaceBase<EnvConfigOption<T>, T> {
+public class EnvNamespace extends NamespaceBase {
 
-    public static <T> EnvNamespace<T> create(String name) {
-        return new EnvNamespace<>(name);
+    public static EnvNamespace create(String name) {
+        return new EnvNamespace(name);
     }
 
     protected EnvNamespace(String name) {
@@ -38,18 +38,17 @@ public class EnvNamespace<T> extends NamespaceBase<EnvConfigOption<T>, T> {
     }
 
     @Override
-    public EnvNamespace<T> subspace(String name) {
-        return new EnvNamespace<>(subName(name));
+    public EnvNamespace subspace(String name) {
+        return new EnvNamespace(subName(name));
     }
 
-    @Override
-    protected String subName(String name) {
+    private String subName(String name) {
         return getName() + "_" + name;
     }
 
     @Override
-    protected EnvConfigOption<T> createFromFullName(String name, Function<String, Optional<T>> loader, T defaultValue) {
-        return EnvConfigOption.create(name, loader, defaultValue);
+    public <T> EnvConfigOption<T> create(String name, Function<String, Optional<T>> loader, T defaultValue) {
+        return EnvConfigOption.create(subName(name), loader, defaultValue);
     }
 
 }

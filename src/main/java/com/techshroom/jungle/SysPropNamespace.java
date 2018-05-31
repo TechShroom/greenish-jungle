@@ -27,10 +27,10 @@ package com.techshroom.jungle;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class SysPropNamespace<T> extends NamespaceBase<SysPropConfigOption<T>, T> {
+public class SysPropNamespace extends NamespaceBase {
 
-    public static <T> SysPropNamespace<T> create(String name) {
-        return new SysPropNamespace<>(name);
+    public static SysPropNamespace create(String name) {
+        return new SysPropNamespace(name);
     }
 
     protected SysPropNamespace(String name) {
@@ -38,18 +38,17 @@ public class SysPropNamespace<T> extends NamespaceBase<SysPropConfigOption<T>, T
     }
 
     @Override
-    public SysPropNamespace<T> subspace(String name) {
-        return new SysPropNamespace<>(subName(name));
+    public SysPropNamespace subspace(String name) {
+        return new SysPropNamespace(subName(name));
     }
 
-    @Override
-    protected String subName(String name) {
+    private String subName(String name) {
         return getName() + "." + name;
     }
 
     @Override
-    protected SysPropConfigOption<T> createFromFullName(String name, Function<String, Optional<T>> loader, T defaultValue) {
-        return SysPropConfigOption.create(name, loader, defaultValue);
+    public <T> SysPropConfigOption<T> create(String name, Function<String, Optional<T>> loader, T defaultValue) {
+        return SysPropConfigOption.create(subName(name), loader, defaultValue);
     }
 
 }

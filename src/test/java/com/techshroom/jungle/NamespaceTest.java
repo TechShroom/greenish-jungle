@@ -24,7 +24,7 @@
  */
 package com.techshroom.jungle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.function.Function;
 
@@ -32,8 +32,8 @@ import org.junit.Test;
 
 public class NamespaceTest {
 
-    private <NS extends Namespace<? extends ConfigOption<String>, String>>
-            NS assertNormalNamespaceFunctionality(String name, Function<String, NS> create) {
+    private <NS extends Namespace> NS assertNormalNamespaceFunctionality(String name,
+            Function<String, NS> create) {
         NS ns = create.apply(name);
         assertEquals(name, ns.getName());
         return ns;
@@ -41,24 +41,24 @@ public class NamespaceTest {
 
     @Test
     public void envNamespace() throws Exception {
-        EnvNamespace<String> ns = assertNormalNamespaceFunctionality("test", x -> EnvNamespace.create(x));
+        EnvNamespace ns = assertNormalNamespaceFunctionality("test", x -> EnvNamespace.create(x));
         assertEquals("test_foo", ns.create("foo", Loaders.forString(), "").getEnvironmentVariableName());
         assertEquals("test_foo", ns.subspace("foo").getName());
     }
 
     @Test
     public void propNamespace() throws Exception {
-        SysPropNamespace<String> ns = assertNormalNamespaceFunctionality("test", x -> SysPropNamespace.create(x));
+        SysPropNamespace ns = assertNormalNamespaceFunctionality("test", x -> SysPropNamespace.create(x));
         assertEquals("test.foo", ns.create("foo", Loaders.forString(), "").getSystemPropertyName());
         assertEquals("test.foo", ns.subspace("foo").getName());
     }
 
     @Test
     public void propOrEnvNamespace() throws Exception {
-        PropOrEnvNamespace<String> ns = assertNormalNamespaceFunctionality("test", x -> PropOrEnvNamespace.create(x));
+        PropOrEnvNamespace ns = assertNormalNamespaceFunctionality("test", x -> PropOrEnvNamespace.create(x));
         assertEquals("test", ns.getPropName());
         assertEquals("TEST", ns.getEnvName());
-        PropOrEnvNamespace<String> subspace = ns.subspace("foo");
+        PropOrEnvNamespace subspace = ns.subspace("foo");
         assertEquals("test.foo", subspace.getName());
         assertEquals("TEST_FOO", subspace.getEnvName());
         assertEquals("test.foo", subspace.getPropName());

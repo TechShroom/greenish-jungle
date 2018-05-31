@@ -27,12 +27,12 @@ package com.techshroom.jungle;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface Namespace<CO extends ConfigOption<T>, T> {
+public interface Namespace {
 
     String getName();
 
-    Namespace<CO, T> subspace(String name);
+    Namespace subspace(String name);
 
-    CO create(String name, Function<String, Optional<T>> loader, T defaultValue);
+    <T> ConfigOption<T> create(String name, Function<String, Optional<T>> loader, T defaultValue);
 
 }

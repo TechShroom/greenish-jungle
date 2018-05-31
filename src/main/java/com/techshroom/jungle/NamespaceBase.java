@@ -24,10 +24,7 @@
  */
 package com.techshroom.jungle;
 
-import java.util.Optional;
-import java.util.function.Function;
-
-public abstract class NamespaceBase<CO extends ConfigOption<T>, T> implements Namespace<CO, T> {
+public abstract class NamespaceBase implements Namespace {
 
     private final String name;
 
@@ -41,12 +38,7 @@ public abstract class NamespaceBase<CO extends ConfigOption<T>, T> implements Na
     }
 
     @Override
-    public CO create(String name, Function<String, Optional<T>> loader, T defaultValue) {
-        return createFromFullName(subName(name), loader, defaultValue);
+    public String toString() {
+        return getClass().getSimpleName() + "[name=" + name + "]";
     }
-
-    protected abstract String subName(String name);
-
-    protected abstract CO createFromFullName(String name, Function<String, Optional<T>> loader, T defaultValue);
-
 }

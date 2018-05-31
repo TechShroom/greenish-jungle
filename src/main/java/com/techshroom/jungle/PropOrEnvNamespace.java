@@ -31,23 +31,19 @@ import java.util.function.Function;
  * Namespace for {@link PropOrEnvConfigOption}. Will automatically capitalize
  * environment variable names.
  */
-public class PropOrEnvNamespace<T> implements Namespace<PropOrEnvConfigOption<T>, T> {
+public class PropOrEnvNamespace extends NamespaceBase {
 
-    public static <T> PropOrEnvNamespace<T> create(String name) {
-        return new PropOrEnvNamespace<>(name.toUpperCase(), name);
+    public static PropOrEnvNamespace create(String name) {
+        return new PropOrEnvNamespace(name.toUpperCase(), name);
     }
 
     private final String envName;
     private final String propName;
 
     private PropOrEnvNamespace(String envName, String propName) {
+        super(propName);
         this.envName = envName;
         this.propName = propName;
-    }
-
-    @Override
-    public String getName() {
-        return propName;
     }
 
     public String getEnvName() {
@@ -59,8 +55,8 @@ public class PropOrEnvNamespace<T> implements Namespace<PropOrEnvConfigOption<T>
     }
 
     @Override
-    public PropOrEnvNamespace<T> subspace(String name) {
-        return new PropOrEnvNamespace<>(envName(name), propName(name));
+    public PropOrEnvNamespace subspace(String name) {
+        return new PropOrEnvNamespace(envName(name), propName(name));
     }
 
     private String envName(String name) {
@@ -72,7 +68,7 @@ public class PropOrEnvNamespace<T> implements Namespace<PropOrEnvConfigOption<T>
     }
 
     @Override
-    public PropOrEnvConfigOption<T> create(String name, Function<String, Optional<T>> loader, T defaultValue) {
+    public <T> PropOrEnvConfigOption<T> create(String name, Function<String, Optional<T>> loader, T defaultValue) {
         return PropOrEnvConfigOption.create(envName(name), propName(name), loader, defaultValue);
     }
 
